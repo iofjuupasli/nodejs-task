@@ -19,6 +19,6 @@ require.config({
     waitSeconds: 10
 });
 
-require(['jquery', 'underscore', 'backbone', 'app', 'qunit'], function(jquery, _, Backbone, App){
+require(['jquery', 'underscore', 'backbone', 'app'], function(jquery, _, Backbone, App){
     new App;
 });

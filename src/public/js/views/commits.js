@@ -2,7 +2,8 @@ define([
 	"backbone",
 	"jquery",
 	"text!../templates/commits.html",
-    "moment"], function(Backbone, $, templateHtml, moment) {
+    "moment",
+    "qunit"], function(Backbone, $, templateHtml, moment, qunit) {
 
     var fib = function(i){
         var prev = 0;
@@ -29,6 +30,18 @@ define([
             })
 
 			$(this.el).html(this.template({ model : collection}));
+
+            test( "color test", function() {
+                var lis = $("li");
+                lis.each(function(){
+                    var $this = $(this);
+                    var content = $this.data("content");
+                    if(content && !isNaN(parseInt(content.slice(-1)))){
+                        equal($this.css("background-color"), "rgb(230, 241, 246)", "we expect value to be #E6F1F6");
+                    }
+                })
+            });
+            QUnit.load();
     	},
 
 		render : function(){
