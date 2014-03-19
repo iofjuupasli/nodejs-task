@@ -1,3 +1,13 @@
+###Implementation
+  ##libs
+    redis - cache layer
+    npm github lib - GitHub api integration
+    underscore.js - fast and lightweight template engine
+    backbone+require.js - js frameworks for models+api integration
+    mocha - backend tests
+    qunit.js - frontend test
+
+
 ## NodeJS Programming Task
 
 
