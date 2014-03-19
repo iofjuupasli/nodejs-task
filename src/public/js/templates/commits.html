@@ -13,12 +13,12 @@
                     <li data-content='<%= c.sha %>' class="list-group-item">
                         <div class="row">
                             <div class="col-xs-2 col-md-1">
-                                <img src="http://www.gravatar.com/avatar/<%= c.author.gravatar_id %>" class="img-circle img-responsive" alt="" /></div>
+                                <img src="http://www.gravatar.com/avatar/<%= c.gravatar_id %>" class="img-circle img-responsive" alt="" /></div>
                             <div class="col-xs-10 col-md-11">
                                 <div>
-                                        <%= c.commit.message %>
+                                        <%= c.message %>
                                     <div class="mic-info">
-                                        By: <a href="#"><%= c.commit.author.name %></a> on <%= c.formatDate %>
+                                        By: <a href="#"><%= c.name %></a> on <%= c.formatDate %>
                                     </div>
                                     <div class="mic-info">
                                     Fib:<%= c.fib %>

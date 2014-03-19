@@ -5,7 +5,14 @@ define([
     "moment"], function(Backbone, $, templateHtml, moment) {
 
     var fib = function(i){
-        return (i <= 1)?i:fib(i-1)+fib(i-2);
+        var prev = 0;
+        var current = 1;
+        for(var j=1; j<i; j++){
+            var temp = prev;
+            prev = current
+            current += temp;
+        }
+        return current;
     }
     return Backbone.View.extend({
     	template: _.template(templateHtml),
@@ -15,11 +22,12 @@ define([
 
     	renderItem : function(){
             var collection = this.collection.map(function(model, key){
-                var dt = model.get("commit.author.date");
+                var dt = model.get("date");
                 model.set("formatDate", moment(dt).format("YYYY-DD-MM"));
                 model.set("fib", fib(key+1));
                 return model.toJSON();
             })
+
 			$(this.el).html(this.template({ model : collection}));
     	},
 

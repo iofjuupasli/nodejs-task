@@ -10,6 +10,7 @@ var path = require('path');
 var fs = require('fs');
 var gitProxy = require('./proxy');
 var app = express();
+var _ = require("lodash");
 
 
 // all environments
@@ -35,6 +36,12 @@ app.get('/', function (req, res) {
 app.get('/api/:user', function(req, res){
     var user = req.params.user;
     gitProxy.getRepos(user, function(repos) {
+        repos = _.map(repos, function(model){
+            return {
+                name: model.name,
+                full_name: model.full_name
+            }
+        })
         res.json(repos);
     });
 });
@@ -43,6 +50,14 @@ app.get('/api/:user/:repo', function(req, res){
     var user = req.params.user;
     var repo = req.params.repo;
     gitProxy.getCommits(user, repo, function(commits) {
+        commits = _.map(commits, function(model){
+            return {
+                message: model.commit.message,
+                gravatar_id: (model.author) ? model.author.gravatar_id: "",
+                name: model.commit.author.name,
+                date: model.commit.author.date
+            }
+        })
         res.json(commits);
     });
 });
