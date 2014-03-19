@@ -34,34 +34,45 @@ var checker = function(queueName){
 }
 
 var postRunner = function(next){
+    console.log("running was", this._running);
     this._running -= 1;
+    console.log("running become", this._running);
     this._getGitCommits();
     this._getGitRepos();
     next();
 }
 
-gitProxy.prototype._getGitRepos = function(){
+gitProxy.prototype._getGitRepos = function(user, next){
+        console.log(arguments);
         var command = this._repoQueue.shift();
         var user = command[0],
             callback = command[1];
         github.repos.getFromUser({
             user: user
-        }, callback);
+        }, function(err, repos){
+            callback(err, repos);
+            next()
+        });
 }
 
 gitProxy.pre("_getGitRepos", checker("repoQueue"));
 
 gitProxy.post("_getGitRepos", postRunner);
 
-gitProxy.prototype._getGitCommits = function(){
+gitProxy.prototype._getGitCommits = function(user, repo, next){
+    console.log(arguments);
     var command = this._commitQueue.shift();
     var user = command[0],
         repo = command[1],
         callback = command[2];
+
     github.repos.getCommits({
         user: user,
         repo: repo
-    }, callback);
+    }, function(err, commits){
+        callback(err, commits);
+        next()
+    });
 }
 
 gitProxy.pre("_getGitCommits", checker("commitQueue"));
