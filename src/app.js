@@ -8,7 +8,7 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
-var gitProxy = require('./src/service/proxy');
+var gitProxy = require('./proxy');
 var app = express();
 
 

@@ -55,10 +55,6 @@ gitProxy.prototype._getGitRepos = function(user, next){
         });
 }
 
-gitProxy.pre("_getGitRepos", checker("repoQueue"));
-
-gitProxy.post("_getGitRepos", postRunner);
-
 gitProxy.prototype._getGitCommits = function(user, repo, next){
     console.log(arguments);
     var command = this._commitQueue.shift();
@@ -74,6 +70,10 @@ gitProxy.prototype._getGitCommits = function(user, repo, next){
         next()
     });
 }
+
+gitProxy.pre("_getGitRepos", checker("repoQueue"));
+
+gitProxy.post("_getGitRepos", postRunner);
 
 gitProxy.pre("_getGitCommits", checker("commitQueue"));
 
