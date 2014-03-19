@@ -6,7 +6,8 @@ require.config({
         "backbone": "../libs/backbone/backbone",
         "bootstrap" : "../libs/bootstrap/dist/js/bootstrap.min",
         "text" : "../libs/requirejs-text/text",
-        "moment" : "../libs/momentjs/moment"
+        "moment" : "../libs/momentjs/moment",
+        "qunit" : "../libs/qunit/qunit/qunit"
     },
     shim: {
         "backbone": {
@@ -18,6 +19,6 @@ require.config({
     waitSeconds: 10
 });
 
-require(['jquery', 'underscore', 'backbone', 'app'], function(jquery, _, Backbone, App){
+require(['jquery', 'underscore', 'backbone', 'app', 'qunit'], function(jquery, _, Backbone, App){
     new App;
 });

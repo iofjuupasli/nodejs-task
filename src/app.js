@@ -60,7 +60,8 @@ app.get('/api/:user/:repo', function(req, res){
                 message: model.commit.message,
                 gravatar_id: (model.author) ? model.author.gravatar_id: "",
                 name: model.commit.author.name,
-                date: model.commit.author.date
+                date: model.commit.author.date,
+                sha: model.sha
             }
         })
         res.json(commits);
