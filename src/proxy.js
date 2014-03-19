@@ -14,7 +14,7 @@ var github = new GitHubApi({
 var gitProxy = function () {
 };
 _.extend(gitProxy, hooks);
-gitProxy.prototype._running = 0;
+gitProxy.prototype.running = 0;
 gitProxy.prototype._repoQueue = [];
 gitProxy.prototype._commitQueue = [];
 
@@ -24,50 +24,44 @@ var checker = function (queueName) {
         var args = Array.prototype.slice.call(arguments, 1);
         if (args[0])
             queue.push(args);
-        if (this._running >= 3) {
+        if (this.running >= 3) {
             console.log("waiting for the free connection slots");
         } else if (!!queue.length) {
-            next();
-            this._running += 1;
+            var command = queue.shift();
+            this.running += 1;
+            next.apply(this, command);
             console.log("new thread started, number:", this._running);
-        } else
+        } else{
             console.log("no commands in the queue");
+        }
     }
 }
 
-var postRunner = function (next) {
-    this._running -= 1;
+var postRunner = function (next, result) {
+    this.running -= 1;
     this._getGitCommits();
     this._getGitRepos();
     console.log("run next");
-    next();
+    next(null, result);
 }
 
 gitProxy.prototype._getGitRepos = function (user, next) {
-    var command = this._repoQueue.shift();
-    var user = command[0],
-        callback = command[1];
     github.repos.getFromUser({
-        user: user
+        user: user,
+        per_page: 100
     }, function (err, repos) {
-        callback(err, repos);
-        next()
+        next(err, repos);
     });
 }
 
 gitProxy.prototype._getGitCommits = function (user, repo, next) {
-    var command = this._commitQueue.shift();
-    var user = command[0],
-        repo = command[1],
-        callback = command[2];
-
     github.repos.getCommits({
         user: user,
         repo: repo,
         per_page: 100
     }, function (err, commits) {
-        callback(err, commits);
-        next()
+        //callback(err, commits);
+        next(err, commits);
     });
 }
 

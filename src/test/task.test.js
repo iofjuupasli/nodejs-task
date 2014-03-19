@@ -1,16 +1,16 @@
 var assert = require("assert"),
-    mockRequests = require('./mockRequests'),
     _ = require("lodash"),
     gitProxy = require("../proxy"),
+    mockRequests = require('./mockRequests'),
     commitList = require('./testCommitList'),
     repoList = require('./testRepoList');
 
 var mock = mockRequests();
 describe('joyent', function (){
-    it("get right count of repos", function(next){
+    it("get right count of repos", function(done){
         gitProxy.getRepos("joyent", function(repos){
             assert.equal(repos.length, repoList.length);
-            next();
+            done();
         });
     })
     it("get right count of commits", function(next){
@@ -25,12 +25,16 @@ describe('joyent', function (){
             function(){
                 gitProxy.getCommits("joyent", "node", function(commits){
                     assert.ok(mock.pendingMocks().length<4)
+                    assert.ok(gitProxy.running<4)
+                    assert.equal(commits.length, commitList.length);
                     completed++;
                     if(completed==100) next();
                 });
             },
             function(){
                 gitProxy.getRepos("joyent", function(repos){
+                    assert.equal(repos.length, repoList.length);
+                    assert.ok(gitProxy.running<4)
                     assert.ok(mock.pendingMocks().length<4)
                     completed++;
                     if(completed==100) next();

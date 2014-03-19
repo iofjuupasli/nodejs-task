@@ -33,6 +33,11 @@ app.get('/', function (req, res) {
         res.send(text);
     });
 });
+app.get('/test', function (req, res) {
+    fs.readFile(__dirname + '/public/test.html', 'utf8', function (err, text) {
+        res.send(text);
+    });
+});
 app.get('/api/:user', function(req, res){
     var user = req.params.user;
     gitProxy.getRepos(user, function(repos) {
