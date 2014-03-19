@@ -20,9 +20,11 @@
                                     <div class="mic-info">
                                         By: <a href="#"><%= c.commit.author.name %></a> on <%= c.formatDate %>
                                     </div>
+                                    <div class="mic-info">
+                                    Fib:<%= c.fib %>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="comment-text"><%= c.fib %></div>
                         </div>
                     </li>
 <% }); %>
