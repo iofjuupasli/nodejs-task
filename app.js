@@ -8,7 +8,9 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
+var gitProxy = require('./src/service/proxy');
 var app = express();
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,7 +32,20 @@ app.get('/', function (req, res) {
         res.send(text);
     });
 });
+app.get('/api/:user', function(req, res){
+    var user = req.params.user;
+    gitProxy.getRepos(user, function(repos) {
+        res.json(repos);
+    });
+});
 
+app.get('/api/:user/:repo', function(req, res){
+    var user = req.params.user;
+    var repo = req.params.repo;
+    gitProxy.getCommits(user, repo, function(commits) {
+        res.json(commits);
+    });
+});
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
