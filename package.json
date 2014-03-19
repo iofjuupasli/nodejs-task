@@ -10,7 +10,8 @@
     "github": "*",
     "redis": "*",
     "hooks": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "nock": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

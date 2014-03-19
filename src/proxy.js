@@ -11,52 +11,51 @@ var github = new GitHubApi({
     timeout: 5000
 });
 
-var gitProxy = function(){};
+var gitProxy = function () {
+};
 _.extend(gitProxy, hooks);
 gitProxy.prototype._running = 0;
 gitProxy.prototype._repoQueue = [];
 gitProxy.prototype._commitQueue = [];
 
-var checker = function(queueName){
-    return function(next, user, callback){
-        var queue = this["_"+queueName];
+var checker = function (queueName) {
+    return function (next, user, callback) {
+        var queue = this["_" + queueName];
         var args = Array.prototype.slice.call(arguments, 1);
-        if(args[0])
+        if (args[0])
             queue.push(args);
-        if (this._running>=3){
+        if (this._running >= 3) {
             console.log("waiting for the free connection slots");
-        } else if(!!queue.length){
+        } else if (!!queue.length) {
             next();
             this._running += 1;
+            console.log("new thread started, number:", this._running);
         } else
             console.log("no commands in the queue");
     }
 }
 
-var postRunner = function(next){
-    console.log("running was", this._running);
+var postRunner = function (next) {
     this._running -= 1;
-    console.log("running become", this._running);
     this._getGitCommits();
     this._getGitRepos();
+    console.log("run next");
     next();
 }
 
-gitProxy.prototype._getGitRepos = function(user, next){
-        console.log(arguments);
-        var command = this._repoQueue.shift();
-        var user = command[0],
-            callback = command[1];
-        github.repos.getFromUser({
-            user: user
-        }, function(err, repos){
-            callback(err, repos);
-            next()
-        });
+gitProxy.prototype._getGitRepos = function (user, next) {
+    var command = this._repoQueue.shift();
+    var user = command[0],
+        callback = command[1];
+    github.repos.getFromUser({
+        user: user
+    }, function (err, repos) {
+        callback(err, repos);
+        next()
+    });
 }
 
-gitProxy.prototype._getGitCommits = function(user, repo, next){
-    console.log(arguments);
+gitProxy.prototype._getGitCommits = function (user, repo, next) {
     var command = this._commitQueue.shift();
     var user = command[0],
         repo = command[1],
@@ -64,8 +63,9 @@ gitProxy.prototype._getGitCommits = function(user, repo, next){
 
     github.repos.getCommits({
         user: user,
-        repo: repo
-    }, function(err, commits){
+        repo: repo,
+        per_page: 100
+    }, function (err, commits) {
         callback(err, commits);
         next()
     });
@@ -79,32 +79,39 @@ gitProxy.post("_getGitCommits", postRunner);
 
 gitProxy.post("_getGitRepos", postRunner);
 
-gitProxy.prototype.getRepos = function(user, callback){
+gitProxy.prototype.getRepos = function (user, callback) {
     var self = this;
-    cacheManager.exists(user, function(err, isExists){
-        if (isExists){
-            cacheManager.get(user,callback);
-            self._getGitRepos(user, function(err, repos){
-                cacheManager.store(user, repos, function(){});
+    cacheManager.exists(user, function (err, isExists) {
+        if (isExists) {
+            cacheManager.get(user, callback);
+            self._getGitRepos(user, function (err, repos) {
+                cacheManager.store(user, repos, function () {
+                });
             });
-        }else{
-            self._getGitRepos(user, function(err, repos){
-                cacheManager.store(user, repos, function(){});
+        } else {
+            self._getGitRepos(user, function (err, repos) {
+                cacheManager.store(user, repos, function () {
+                });
                 callback(repos);
             });
         }
     });
 }
 
-gitProxy.prototype.getCommits = function(user, repo, callback){
-    var key = user+repo;
+gitProxy.prototype.getCommits = function (user, repo, callback) {
+    var key = user + repo;
     var self = this;
-    cacheManager.exists(key, function(err, isExists){
-        if (isExists)
-            cacheManager.get(key,callback);
-        else{
-            self._getGitCommits(user,repo,function(err, commits){
-                cacheManager.store(key, commits, function(){});
+    cacheManager.exists(key, function (err, isExists) {
+        if (isExists){
+            cacheManager.get(key, callback);
+            self._getGitCommits(user, repo, function (err, commits) {
+                cacheManager.store(key, commits, function () {
+                });
+            });
+        } else {
+            self._getGitCommits(user, repo, function (err, commits) {
+                cacheManager.store(key, commits, function () {
+                });
                 callback(commits);
             });
         }
