@@ -24,7 +24,7 @@ define([
     	},
 
 		render : function(){
-			$(this.el).html(this.template({ model : this.collection.toJSON() }));
+			$(this.el).html(this.template({ model : [] }));
 			return this;
     	}
     });

@@ -7,7 +7,7 @@ define([
 	, './models/repos'
 
 ], function(Backbone, CommitsView, ReposView, CommitList, RepoList){
-	var $contaier = $('.contaier');
+	var $contaier = $('.container');
 
 	var show = function(view){
 		$contaier.empty().append(view.render().$el);		

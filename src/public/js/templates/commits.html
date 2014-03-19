@@ -1,17 +1,34 @@
-<a href='#joyent'>reps</a>
+    <div class="row">
+        <div class="panel panel-default widget">
+            
+            <div class="panel-heading">
+            <a href='#joyent' class="btn btn-primary">
+                <span class="glyphicon glyphicon-circle-arrow-left"></span> back to repos
+            </a>
+            </div>
+            <div class="panel-body">
+                <ul id="commits" class="list-group">
 
+                <% _.each(model, function(c, i) { %>
+                    <li data-content='<%= c.sha %>' class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-1">
+                                <img src="http://www.gravatar.com/avatar/<%= c.author.gravatar_id %>" class="img-circle img-responsive" alt="" /></div>
+                            <div class="col-xs-10 col-md-11">
+                                <div>
+                                        <%= c.commit.message %>
+                                    <div class="mic-info">
+                                        By: <a href="#"><%= c.commit.author.name %></a> on <%= c.formatDate %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment-text"><%= c.fib %></div>
+                        </div>
+                    </li>
+<% }); %>
+                </ul>
 
-<ul id="commits">
-	<% _.each(model, function(c, i) { %>
-    <li data-content='<%= c.sha %>'>
-        <dl>
-            <dt><%= c.commit.author.name %></dt>
-            <dt><%= c.commit.author.email %></dt>
-            <dt><img src="http://www.gravatar.com/avatar/<%= c.author.gravatar_id %>"/></dt>
-            <dt><%= c.commit.message %></dt>
-            <dt><%= c.formatDate %></dt>
-            <dt><%= c.fib %></dt>
-        </dl>
-    </li>
-    <% }); %>
-</ul>
+            </div>
+        </div>
+    </div>
+

@@ -1,8 +1,17 @@
 
-<ul>
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="col-md-3">
+        <ul class="list-unstyled">
 	<% _.each(model, function(c) { %>
     <li>
     	<a href="/#joyent/<%= c.name %>"><%= c.full_name %></a>
     </li>	    
     <% }); %>
-</ul>
+        </ul>
+      </div>
+ 
+    </div>
+  </div>
+
