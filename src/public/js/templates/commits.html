@@ -1,0 +1,17 @@
+<a href='#joyent'>reps</a>
+
+
+<ul id="commits">
+	<% _.each(model, function(c, i) { %>
+    <li data-content='<%= c.sha %>'>
+        <dl>
+            <dt><%= c.commit.author.name %></dt>
+            <dt><%= c.commit.author.email %></dt>
+            <dt><img src="http://www.gravatar.com/avatar/<%= c.author.gravatar_id %>"/></dt>
+            <dt><%= c.commit.message %></dt>
+            <dt><%= c.formatDate %></dt>
+            <dt><%= c.fib %></dt>
+        </dl>
+    </li>
+    <% }); %>
+</ul>

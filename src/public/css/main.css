@@ -1,0 +1,41 @@
+#commits li[data-content$="0"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="1"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="2"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="3"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="4"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="5"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="6"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="7"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="8"]  {
+    background-color: #E6F1F6;
+}
+#commits li[data-content$="9"]  {
+    background-color: #E6F1F6;
+}
+
+ul#commits  {
+    list-style: none;
+}
+#commits li {
+    width: 600px;
+    border: 2px solid #666;
+    margin: 10px;
+    padding: 5px;
+    text-align: justify;
+}

@@ -73,11 +73,11 @@ gitProxy.prototype._getGitCommits = function(user, repo, next){
 
 gitProxy.pre("_getGitRepos", checker("repoQueue"));
 
-gitProxy.post("_getGitRepos", postRunner);
-
 gitProxy.pre("_getGitCommits", checker("commitQueue"));
 
 gitProxy.post("_getGitCommits", postRunner);
+
+gitProxy.post("_getGitRepos", postRunner);
 
 gitProxy.prototype.getRepos = function(user, callback){
     var self = this;
